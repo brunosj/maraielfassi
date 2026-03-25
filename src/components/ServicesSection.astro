@@ -1,0 +1,68 @@
+---
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  services: CollectionEntry<'services'>[];
+}
+
+const { services } = Astro.props;
+
+const sorted = [...services].sort((a, b) => a.data.order - b.data.order);
+
+const items = await Promise.all(
+  sorted.map(async (entry) => {
+    const { Content } = await render(entry);
+    return { entry, Content };
+  }),
+);
+---
+
+<section class="services" id="services" aria-labelledby="services-heading">
+  <h2 id="services-heading" class="section-title">Core services</h2>
+  <p class="services__lede">
+    Click a service to expand details, including offerings and selected experience.
+  </p>
+  <ul class="services__list">
+    {
+      items.map(({ entry, Content }) => {
+        const { title, summary, serviceIncludes, selectedExperience } = entry.data;
+        return (
+          <li class="services__item">
+            <details class="service-card">
+              <summary class="service-card__summary">
+                <span class="service-card__title">{title}</span>
+                <span class="service-card__hint" aria-hidden="true">
+                  <span class="service-card__expand-label service-card__expand-label--open">Expand</span>
+                  <span class="service-card__expand-label service-card__expand-label--close">Close</span>
+                </span>
+              </summary>
+              <div class="service-card__body">
+                <p class="service-card__summary-text">{summary}</p>
+                <div class="service-card__rich prose">
+                  <Content />
+                </div>
+                <h3 class="service-card__subhead">Services include</h3>
+                <ul class="service-card__bullets">
+                  {serviceIncludes.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+                {selectedExperience.length > 0 ? (
+                  <>
+                    <h3 class="service-card__subhead">Selected experience</h3>
+                    <ul class="service-card__bullets">
+                      {selectedExperience.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </>
+                ) : null}
+              </div>
+            </details>
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>

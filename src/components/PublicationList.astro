@@ -1,0 +1,72 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  publications: CollectionEntry<'publications'>[];
+}
+
+const { publications } = Astro.props;
+
+const categoryOrder = ['article', 'report', 'policy', 'video'] as const;
+
+const categoryLabels: Record<(typeof categoryOrder)[number], string> = {
+  article: 'Articles',
+  report: 'Reports',
+  policy: 'Policy papers, briefs and blog posts',
+  video: 'Videos',
+};
+
+function sortPubs(a: CollectionEntry<'publications'>, b: CollectionEntry<'publications'>) {
+  const oa = a.data.sortOrder ?? 999;
+  const ob = b.data.sortOrder ?? 999;
+  if (oa !== ob) return oa - ob;
+  const ya = a.data.year ?? 0;
+  const yb = b.data.year ?? 0;
+  return yb - ya;
+}
+
+const grouped = new Map<string, CollectionEntry<'publications'>[]>();
+for (const cat of categoryOrder) {
+  grouped.set(cat, []);
+}
+for (const pub of publications) {
+  const list = grouped.get(pub.data.category);
+  if (list) list.push(pub);
+}
+for (const list of grouped.values()) {
+  list.sort(sortPubs);
+}
+---
+
+<div class="publication-list">
+  {
+    categoryOrder.map((cat) => {
+      const list = grouped.get(cat) ?? [];
+      if (list.length === 0) return null;
+      return (
+        <section class="publication-list__section" aria-labelledby={`pub-${cat}`}>
+          <h2 id={`pub-${cat}`} class="section-title">
+            {categoryLabels[cat]}
+          </h2>
+          <ul class="publication-list__items">
+            {list.map((p) => (
+              <li class="publication-list__item">
+                <span class="publication-list__title">{p.data.slug}</span>
+                {p.data.url ? (
+                  <a href={p.data.url} rel="noopener noreferrer" class="publication-list__link">
+                    {p.data.citation}
+                  </a>
+                ) : (
+                  <span class="publication-list__text">{p.data.citation}</span>
+                )}
+                {p.data.languageNote ? (
+                  <span class="publication-list__meta"> ({p.data.languageNote})</span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })
+  }
+</div>

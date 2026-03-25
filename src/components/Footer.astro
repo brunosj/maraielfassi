@@ -1,0 +1,42 @@
+---
+interface Lang {
+  language: string;
+  level: string;
+}
+
+interface Props {
+  name: string;
+  contactEmail: string;
+  linkedinUrl: string;
+  languages: Lang[];
+}
+
+const { name, contactEmail, linkedinUrl, languages } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__contact">
+      <h2 class="site-footer__heading">Contact</h2>
+      <p class="site-footer__name">{name}</p>
+      <p class="site-footer__line">
+        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      </p>
+      <p class="site-footer__line">
+        <a href={linkedinUrl} rel="noopener noreferrer">LinkedIn</a>
+      </p>
+    </div>
+    <div class="site-footer__languages">
+      <h2 class="site-footer__heading">Languages</h2>
+      <ul class="site-footer__lang-list">
+        {
+          languages.map(({ language, level }) => (
+            <li>
+              {language} – {level}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>

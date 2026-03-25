@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Astro build output & cache
+dist/
+.astro/
+
+# Environment (Keystatic GitHub app / auth — never commit)
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / editor
+.idea/
+
+# Optional: local tooling
+*.tsbuildinfo
+
+# Deploy platform local metadata (linking, caches — not the committed config files)
+.vercel/
+.netlify/

@@ -1,0 +1,27 @@
+---
+interface Props {
+  name: string;
+  tagline: string;
+}
+
+const { name, tagline } = Astro.props;
+const pathname = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="/" class="site-header__brand">
+      <span class="site-header__name">{name}</span>
+      <span class="site-header__tagline">{tagline}</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/" class:list={['site-nav__link', { 'is-active': pathname === '/' }]}> Home </a>
+      <a
+        href="/publications"
+        class:list={['site-nav__link', { 'is-active': pathname.startsWith('/publications') }]}
+      >
+        Publications
+      </a>
+    </nav>
+  </div>
+</header>

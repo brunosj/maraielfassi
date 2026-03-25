@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PublicationList from '../../components/PublicationList.astro';
+
+const siteList = await getCollection('site');
+const siteEntry = siteList[0];
+if (!siteEntry) throw new Error('Missing site content');
+
+const site = siteEntry.data;
+const publications = await getCollection('publications');
+
+const description = `Publications and videos by ${site.name}: articles, reports, policy briefs, and more.`;
+---
+
+<Layout
+  title="Publications"
+  description={description}
+  name={site.name}
+  tagline={site.tagline}
+  contactEmail={site.contactEmail}
+  linkedinUrl={site.linkedinUrl}
+  languages={site.languages}
+>
+  <div class="page-inner">
+    <header class="page-header">
+      <h1 class="page-title">Publications</h1>
+      <p class="page-header__lede">
+        Selected articles, reports, policy outputs, and videos. Language notes reflect the original
+        publication.
+      </p>
+    </header>
+    <PublicationList publications={publications} />
+  </div>
+</Layout>

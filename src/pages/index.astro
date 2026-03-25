@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import ServicesSection from '../components/ServicesSection.astro';
+
+const siteList = await getCollection('site');
+const siteEntry = siteList[0];
+if (!siteEntry) throw new Error('Missing site content (src/content/site/index.yaml)');
+
+const site = siteEntry.data;
+const services = await getCollection('services');
+
+const description = site.metaDescription ?? site.tagline;
+const introParagraphs = site.intro
+  .split(/\n\n+/)
+  .map((p) => p.trim())
+  .filter(Boolean);
+---
+
+<Layout
+  title={site.name}
+  description={description}
+  name={site.name}
+  tagline={site.tagline}
+  contactEmail={site.contactEmail}
+  linkedinUrl={site.linkedinUrl}
+  languages={site.languages}
+>
+  <div class="page-inner">
+    <section class="hero" aria-labelledby="hero-heading">
+      <h1 id="hero-heading" class="hero__name">{site.name}</h1>
+      <p class="hero__tagline">{site.tagline}</p>
+    </section>
+
+    <section class="intro prose" aria-labelledby="intro-heading">
+      <h2 id="intro-heading" class="visually-hidden">Introduction</h2>
+      {introParagraphs.map((text) => <p>{text}</p>)}
+    </section>
+
+    <ServicesSection services={services} />
+  </div>
+</Layout>
