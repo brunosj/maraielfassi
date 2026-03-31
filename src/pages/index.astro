@@ -1,16 +1,12 @@
 ---
 export const prerender = false;
 
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ServicesSection from '../components/ServicesSection.astro';
+import { loadServicesLive, loadSiteLive } from '../lib/load-live-content';
 
-const siteList = await getCollection('site');
-const siteEntry = siteList[0];
-if (!siteEntry) throw new Error('Missing site content (src/content/site/index.yaml)');
-
-const site = siteEntry.data;
-const services = await getCollection('services');
+const site = await loadSiteLive();
+const services = await loadServicesLive();
 
 const description = site.metaDescription ?? site.tagline;
 const introParagraphs = site.intro

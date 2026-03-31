@@ -1,16 +1,12 @@
 ---
 export const prerender = false;
 
-import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import PublicationList from '../../components/PublicationList.astro';
+import { loadPublicationsLive, loadSiteLive } from '../../lib/load-live-content';
 
-const siteList = await getCollection('site');
-const siteEntry = siteList[0];
-if (!siteEntry) throw new Error('Missing site content');
-
-const site = siteEntry.data;
-const publications = await getCollection('publications');
+const site = await loadSiteLive();
+const publications = await loadPublicationsLive();
 
 const description = `Publications and videos by ${site.name}: articles, reports, policy briefs, and more.`;
 ---

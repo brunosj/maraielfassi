@@ -1,8 +1,8 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import type { PublicationData } from '../lib/content-schemas';
 
 interface Props {
-  publications: CollectionEntry<'publications'>[];
+  publications: PublicationData[];
 }
 
 const { publications } = Astro.props;
@@ -16,21 +16,21 @@ const categoryLabels: Record<(typeof categoryOrder)[number], string> = {
   video: 'Videos',
 };
 
-function sortPubs(a: CollectionEntry<'publications'>, b: CollectionEntry<'publications'>) {
-  const oa = a.data.sortOrder ?? 999;
-  const ob = b.data.sortOrder ?? 999;
+function sortPubs(a: PublicationData, b: PublicationData) {
+  const oa = a.sortOrder ?? 999;
+  const ob = b.sortOrder ?? 999;
   if (oa !== ob) return oa - ob;
-  const ya = a.data.year ?? 0;
-  const yb = b.data.year ?? 0;
+  const ya = a.year ?? 0;
+  const yb = b.year ?? 0;
   return yb - ya;
 }
 
-const grouped = new Map<string, CollectionEntry<'publications'>[]>();
+const grouped = new Map<string, PublicationData[]>();
 for (const cat of categoryOrder) {
   grouped.set(cat, []);
 }
 for (const pub of publications) {
-  const list = grouped.get(pub.data.category);
+  const list = grouped.get(pub.category);
   if (list) list.push(pub);
 }
 for (const list of grouped.values()) {
@@ -51,21 +51,21 @@ for (const list of grouped.values()) {
           <ul class="publication-list__items">
             {list.map((p) => (
               <li class="publication-list__item">
-                <span class="publication-list__title">{p.data.slug}</span>
-                {p.data.url ? (
+                <span class="publication-list__title">{p.slug}</span>
+                {p.url ? (
                   <a
-                    href={p.data.url}
+                    href={p.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     class="publication-list__link"
                   >
-                    {p.data.citation}
+                    {p.citation}
                   </a>
                 ) : (
-                  <span class="publication-list__text">{p.data.citation}</span>
+                  <span class="publication-list__text">{p.citation}</span>
                 )}
-                {p.data.languageNote ? (
-                  <span class="publication-list__meta"> ({p.data.languageNote})</span>
+                {p.languageNote ? (
+                  <span class="publication-list__meta"> ({p.languageNote})</span>
                 ) : null}
               </li>
             ))}

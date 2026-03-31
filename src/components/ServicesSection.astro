@@ -1,21 +1,13 @@
 ---
-import { render } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
+import type { LiveService } from '../lib/content-schemas';
 
 interface Props {
-  services: CollectionEntry<'services'>[];
+  services: LiveService[];
 }
 
 const { services } = Astro.props;
 
-const sorted = [...services].sort((a, b) => a.data.order - b.data.order);
-
-const items = await Promise.all(
-  sorted.map(async (entry) => {
-    const { Content } = await render(entry);
-    return { entry, Content };
-  }),
-);
+const sorted = [...services].sort((a, b) => a.order - b.order);
 ---
 
 <section class="services" id="services" aria-labelledby="services-heading">
@@ -27,8 +19,8 @@ const items = await Promise.all(
   </div>
   <ul class="services__list">
     {
-      items.map(({ entry, Content }) => {
-        const { title, summary, serviceIncludes, selectedExperience } = entry.data;
+      sorted.map((entry) => {
+        const { title, summary, serviceIncludes, selectedExperience, bodyHtml } = entry;
         return (
           <li class="services__item">
             <details class="service-card">
@@ -43,9 +35,7 @@ const items = await Promise.all(
                 <span class="service-card__summary-text">{summary}</span>
               </summary>
               <div class="service-card__body">
-                <div class="service-card__rich">
-                  <Content />
-                </div>
+                <div class="service-card__rich" set:html={bodyHtml} />
                 <h3 class="service-card__subhead">Services include</h3>
                 <ul class="service-card__bullets">
                   {serviceIncludes.map((item) => (
