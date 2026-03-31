@@ -6,7 +6,7 @@
 #   GIT_REMOTE=origin GIT_BRANCH=main   — pull a specific branch (default: tracked branch)
 #   PORT=3001                           — listen port (default: 4321)
 #   NODE_BIN, PNPM_BIN, PM2_BIN         — override tool paths (defaults: lando server layout)
-#   Node 22.12+ required for Astro 6 — on VPS: nvm install 22.12.2 && nvm alias default 22.12.2
+#   Node 22.12+ required for Astro 6 — on VPS: nvm install 22.22.2 && nvm alias default 22.22.2
 #
 # To rename the process, change "name" in ecosystem.config.cjs and PM2_NAME below.
 
@@ -66,6 +66,11 @@ echo "==> Build"
 "$PNPM_BIN" run build
 
 if [[ -f .env ]]; then
+  if [[ ! -r .env ]]; then
+    echo "error: .env exists but is not readable by $(whoami). Fix on the server:" >&2
+    echo "  sudo chown $(whoami):$(id -gn) .env && chmod 600 .env" >&2
+    exit 1
+  fi
   echo "==> Load .env (secrets for PM2 / Keystatic auth)"
   set -a
   # shellcheck disable=SC1091
