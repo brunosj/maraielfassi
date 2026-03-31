@@ -6,6 +6,7 @@
 #   GIT_REMOTE=origin GIT_BRANCH=main   — pull a specific branch (default: tracked branch)
 #   PORT=3001                           — listen port (default: 4321)
 #   NODE_BIN, PNPM_BIN, PM2_BIN         — override tool paths (defaults: lando server layout)
+#   Node 22.12+ required for Astro 6 — on VPS: nvm install 22.12.2 && nvm alias default 22.12.2
 #
 # To rename the process, change "name" in ecosystem.config.cjs and PM2_NAME below.
 
@@ -15,7 +16,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$ROOT"
 
-NODE_BIN="${NODE_BIN:-/home/lando/.nvm/versions/node/v20.12.2/bin/node}"
+NODE_BIN="${NODE_BIN:-/home/lando/.nvm/versions/node/v22.22.2/bin/node}"
 PNPM_BIN="${PNPM_BIN:-/home/lando/.local/share/pnpm/pnpm}"
 PM2_BIN="${PM2_BIN:-/home/lando/.local/share/pnpm/pm2}"
 
