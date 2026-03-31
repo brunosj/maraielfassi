@@ -8,7 +8,7 @@ module.exports = {
       name: 'mef-website',
       cwd: __dirname,
       script: 'dist/server/entry.mjs',
-      interpreter: 'node',
+      interpreter: process.env.NODE_BIN || 'node',
       instances: 1,
       exec_mode: 'fork',
       autorestart: true,
@@ -17,6 +17,8 @@ module.exports = {
       env_production: {
         NODE_ENV: 'production',
         PORT: process.env.PORT || '4321',
+        KEYSTATIC_BASIC_AUTH_USER: process.env.KEYSTATIC_BASIC_AUTH_USER || 'editor',
+        KEYSTATIC_BASIC_AUTH_PASSWORD: process.env.KEYSTATIC_BASIC_AUTH_PASSWORD,
       },
     },
   ],

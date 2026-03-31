@@ -19,7 +19,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "./deploy.sh",
-    "astro": "astro"
+    "deploy": "bash scripts/deploy.sh",
+    "astro": "astro",
+    "extract:docx-links": "node scripts/extract-docx-hyperlinks.mjs"
   }
 }

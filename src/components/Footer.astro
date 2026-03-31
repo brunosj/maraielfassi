@@ -16,7 +16,7 @@ const { name, contactEmail, linkedinUrl, languages } = Astro.props;
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <div class="site-footer__contact">
+    <div class="site-footer__block site-footer__contact">
       <h2 class="site-footer__heading">Contact</h2>
       <p class="site-footer__name">{name}</p>
       <p class="site-footer__line">
@@ -26,7 +26,7 @@ const { name, contactEmail, linkedinUrl, languages } = Astro.props;
         <a href={linkedinUrl} rel="noopener noreferrer">LinkedIn</a>
       </p>
     </div>
-    <div class="site-footer__languages">
+    <div class="site-footer__block site-footer__languages">
       <h2 class="site-footer__heading">Languages</h2>
       <ul class="site-footer__lang-list">
         {
@@ -40,3 +40,89 @@ const { name, contactEmail, linkedinUrl, languages } = Astro.props;
     </div>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    padding: 0;
+    background: var(--color-surface);
+    border-top: var(--border-strong);
+  }
+
+  .site-footer__inner {
+    max-width: none;
+    margin: 0;
+    display: grid;
+    gap: 0;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 40rem) {
+    .site-footer__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .site-footer__block {
+    padding: var(--space-xl) var(--space-lg);
+    border-bottom: var(--border-thin);
+  }
+
+  @media (min-width: 40rem) {
+    .site-footer__block {
+      border-bottom: none;
+    }
+
+    .site-footer__block:first-child {
+      border-right: var(--border-strong);
+    }
+  }
+
+  .site-footer__heading {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-md);
+  }
+
+  .site-footer__name {
+    margin: 0 0 var(--space-xs);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .site-footer__line {
+    margin: 0 0 var(--space-xs);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .site-footer__lang-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__lang-list li {
+    margin-bottom: var(--space-xs);
+    padding-bottom: var(--space-xs);
+    border-bottom: var(--border-thin);
+  }
+
+  .site-footer__lang-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+</style>

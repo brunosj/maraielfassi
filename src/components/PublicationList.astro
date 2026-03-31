@@ -53,7 +53,12 @@ for (const list of grouped.values()) {
               <li class="publication-list__item">
                 <span class="publication-list__title">{p.data.slug}</span>
                 {p.data.url ? (
-                  <a href={p.data.url} rel="noopener noreferrer" class="publication-list__link">
+                  <a
+                    href={p.data.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="publication-list__link"
+                  >
                     {p.data.citation}
                   </a>
                 ) : (
@@ -70,3 +75,114 @@ for (const list of grouped.values()) {
     })
   }
 </div>
+
+<style>
+  .publication-list {
+    padding: 0 var(--space-md) var(--space-xl);
+  }
+
+  @media (min-width: 40.01rem) {
+    .publication-list {
+      padding: 0 var(--space-lg) var(--space-2xl);
+    }
+  }
+
+  .publication-list__section {
+    margin-bottom: var(--space-xl);
+  }
+
+  @media (max-width: 40rem) {
+    .publication-list__section {
+      margin-bottom: var(--space-lg);
+    }
+  }
+
+  .publication-list__section:last-child {
+    margin-bottom: 0;
+  }
+
+  .publication-list__items {
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: var(--border-strong);
+  }
+
+  @media (min-width: 40.01rem) {
+    .publication-list__items {
+      margin-top: var(--space-md);
+    }
+  }
+
+  .publication-list__item {
+    margin: 0;
+    padding: var(--space-sm) 0;
+    border-bottom: var(--border-thin);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xs);
+  }
+
+  @media (min-width: 40rem) {
+    .publication-list__item {
+      padding: var(--space-md) 0;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: baseline;
+    }
+  }
+
+  .publication-list__item:last-child {
+    border-bottom: none;
+  }
+
+  .publication-list__title {
+    display: block;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+
+  .publication-list__link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    font-weight: 400;
+    font-size: 1rem;
+    color: var(--color-text);
+    line-height: 1.45;
+    word-break: break-word;
+  }
+
+  @media (min-width: 40.01rem) {
+    .publication-list__link {
+      font-size: 1.02rem;
+    }
+  }
+
+  .publication-list__text {
+    display: inline;
+    font-size: 1rem;
+    line-height: 1.45;
+    word-break: break-word;
+  }
+
+  @media (min-width: 40.01rem) {
+    .publication-list__text {
+      font-size: 1.02rem;
+    }
+  }
+
+  .publication-list__meta {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 40.01rem) {
+    .publication-list__meta {
+      font-size: 0.9rem;
+    }
+  }
+</style>

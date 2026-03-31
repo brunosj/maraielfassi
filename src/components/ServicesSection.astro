@@ -19,10 +19,12 @@ const items = await Promise.all(
 ---
 
 <section class="services" id="services" aria-labelledby="services-heading">
-  <h2 id="services-heading" class="section-title">Core services</h2>
-  <p class="services__lede">
-    Click a service to expand details, including offerings and selected experience.
-  </p>
+  <div class="services__header">
+    <h2 id="services-heading" class="section-title">Core services</h2>
+    <!-- <p class="services__lede">
+      Click a service to expand details, including offerings and selected experience.
+    </p> -->
+  </div>
   <ul class="services__list">
     {
       items.map(({ entry, Content }) => {
@@ -31,15 +33,17 @@ const items = await Promise.all(
           <li class="services__item">
             <details class="service-card">
               <summary class="service-card__summary">
-                <span class="service-card__title">{title}</span>
-                <span class="service-card__hint" aria-hidden="true">
-                  <span class="service-card__expand-label service-card__expand-label--open">Expand</span>
-                  <span class="service-card__expand-label service-card__expand-label--close">Close</span>
+                <span class="service-card__summary-top">
+                  <span class="service-card__title">{title}</span>
+                  <span class="service-card__hint" aria-hidden="true">
+                    <span class="service-card__expand-label service-card__expand-label--open">Expand</span>
+                    <span class="service-card__expand-label service-card__expand-label--close">Close</span>
+                  </span>
                 </span>
+                <span class="service-card__summary-text">{summary}</span>
               </summary>
               <div class="service-card__body">
-                <p class="service-card__summary-text">{summary}</p>
-                <div class="service-card__rich prose">
+                <div class="service-card__rich">
                   <Content />
                 </div>
                 <h3 class="service-card__subhead">Services include</h3>
@@ -66,3 +70,158 @@ const items = await Promise.all(
     }
   </ul>
 </section>
+
+<style>
+  .services {
+    padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+  }
+
+  .services__header {
+    margin-bottom: var(--space-lg);
+  }
+
+  .services__lede {
+    margin: var(--space-sm) 0 0;
+    color: var(--color-text-muted);
+    max-width: 38rem;
+    font-size: 1rem;
+  }
+
+  .services__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: var(--border-strong);
+    border-left: var(--border-strong);
+  }
+
+  @media (min-width: 52rem) {
+    .services__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .services__item {
+    margin: 0;
+    border-right: var(--border-strong);
+    border-bottom: var(--border-strong);
+  }
+
+  .service-card {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+    height: 100%;
+  }
+
+  .service-card__summary {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    cursor: pointer;
+    list-style: none;
+    min-height: 5.5rem;
+  }
+
+  .service-card__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .service-card__summary-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-md);
+    width: 100%;
+  }
+
+  .service-card__title {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-transform: uppercase;
+    max-width: 85%;
+  }
+
+  .service-card__hint {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .service-card__summary-text {
+    display: block;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.98rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  details[open] .service-card__summary-text {
+    display: none;
+  }
+
+  .service-card__expand-label--close {
+    display: none;
+  }
+
+  details[open] .service-card__expand-label--open {
+    display: none;
+  }
+
+  details[open] .service-card__expand-label--close {
+    display: inline;
+  }
+
+  .service-card__body {
+    margin: 0 var(--space-lg) var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: var(--border-thin);
+  }
+
+  .service-card__rich {
+    margin-bottom: var(--space-md);
+    font-family: var(--font-body);
+  }
+
+  .service-card__rich :global(p) {
+    margin: 0 0 var(--space-md);
+  }
+
+  .service-card__rich :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .service-card__subhead {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-text-muted);
+    margin: var(--space-md) 0 var(--space-sm);
+  }
+
+  .service-card__bullets {
+    margin: 0 0 var(--space-sm);
+    padding-left: 1.15rem;
+    font-size: 0.98rem;
+  }
+
+  .service-card__bullets li {
+    margin-bottom: var(--space-xs);
+  }
+</style>

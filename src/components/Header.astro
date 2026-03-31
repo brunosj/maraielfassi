@@ -25,3 +25,120 @@ const pathname = Astro.url.pathname;
     </nav>
   </div>
 </header>
+
+<style>
+  .site-header {
+    background: var(--color-surface);
+    border-bottom: var(--border-strong);
+  }
+
+  @media (min-width: 40.0625rem) {
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+  }
+
+  .site-header__inner {
+    max-width: none;
+    margin: 0;
+    padding: var(--space-md) var(--space-lg);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: var(--space-lg);
+  }
+
+  @media (max-width: 40rem) {
+    .site-header__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+    }
+  }
+
+  .site-header__brand {
+    text-decoration: none;
+    color: inherit;
+    display: none;
+  }
+
+  @media (min-width: 40.0625rem) {
+    .site-header__brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+  }
+
+  .site-header__brand:hover {
+    color: inherit;
+  }
+
+  .site-header__name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  .site-header__tagline {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+    /* max-width: 28rem; */
+    line-height: 1.5;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 0.15rem;
+  }
+
+  @media (max-width: 40rem) {
+    .site-nav {
+      justify-content: flex-start;
+      gap: var(--space-xs) var(--space-md);
+      padding-top: 0;
+    }
+  }
+
+  .site-nav__link {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 0.1rem;
+  }
+
+  @media (max-width: 40rem) {
+    .site-nav__link {
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      min-height: 2.75rem;
+      display: inline-flex;
+      align-items: flex-end;
+      padding: 0 0 0.12rem;
+    }
+  }
+
+  .site-nav__link:hover,
+  .site-nav__link.is-active {
+    color: var(--color-text);
+    border-bottom-color: var(--color-border);
+  }
+</style>
