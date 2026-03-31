@@ -11,6 +11,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // https://astro.build/config
 export default defineConfig({
   site: 'https://maraielfassi.com',
+  // Baked into @astrojs/node standalone: listen on all interfaces so 127.0.0.1 works for
+  // Caddy/nginx. Without this, some systems only bind ::1 and curl 127.0.0.1:PORT refuses.
+  server: {
+    host: true,
+    port: 4321,
+  },
   adapter: node({
     mode: 'standalone',
   }),

@@ -16,6 +16,7 @@ module.exports = {
       max_memory_restart: '500M',
       env_production: {
         NODE_ENV: 'production',
+        HOST: process.env.HOST || '0.0.0.0',
         PORT: process.env.PORT || '4321',
         KEYSTATIC_BASIC_AUTH_USER: process.env.KEYSTATIC_BASIC_AUTH_USER || 'editor',
         KEYSTATIC_BASIC_AUTH_PASSWORD: process.env.KEYSTATIC_BASIC_AUTH_PASSWORD,
