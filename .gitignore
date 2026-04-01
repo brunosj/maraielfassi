@@ -30,3 +30,6 @@ Thumbs.db
 # Deploy platform local metadata (linking, caches — not the committed config files)
 .vercel/
 .netlify/
+
+# pnpm store
+.pnpm-store/

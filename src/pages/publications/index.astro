@@ -3,6 +3,7 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import PublicationList from '../../components/PublicationList.astro';
+// Live SSR: Keystatic Reader (`keystaticReader` in load-live-content.ts).
 import { loadPublicationsLive, loadSiteLive } from '../../lib/load-live-content';
 
 const site = await loadSiteLive();

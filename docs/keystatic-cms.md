@@ -80,6 +80,17 @@ If `url` is set, the publications list links the citation; otherwise it shows pl
 
 If they drift, `astro build` will report schema/content errors.
 
+## SSR pages and the Keystatic Reader API
+
+Some routes use **`export const prerender = false`** (server mode) so edits in `/keystatic` show up on refresh without rebuilding. Those pages load content through the official [Reader API](https://keystatic.com/docs/reader-api), not by scanning the tree by hand:
+
+- [`src/lib/keystatic-reader.ts`](../src/lib/keystatic-reader.ts) — `createReader(process.cwd(), keystaticConfig)` so paths and shapes match [`keystatic.config.ts`](../keystatic.config.ts).
+- [`src/lib/load-live-content.ts`](../src/lib/load-live-content.ts) — `loadSiteLive()`, `loadPublicationsLive()`, and `loadServicesLive()` for the homepage and publications page.
+
+**Publications `slug` field:** Keystatic may expose `fields.slug` as a string or as `{ name, … }` depending on storage; the loader normalizes to a display string before Zod validation.
+
+**Service rich text (Markdoc body):** The reader’s Markdoc field is stored as a **Markdoc AST**, while Keystatic’s `DocumentRenderer` expects **ProseMirror-style document JSON**, so they are not interchangeable. For stable HTML (and parity with the previous `@markdoc/markdoc` pipeline), **service body HTML** is still produced by reading the `.mdoc` file and rendering the body with Markdoc. Metadata (`title`, `order`, `summary`, lists, etc.) comes from the Reader (`services.all({ resolveLinkedFiles: true })`) so Keystatic validates those fields and linked assets are resolved consistently.
+
 ## Typical editing workflow
 
 1. Run `pnpm dev`.

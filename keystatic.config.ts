@@ -13,6 +13,9 @@ export default config({
   storage: {
     kind: 'local',
   },
+  ui: {
+    brand: { name: 'Marai El Fassi' },
+  },
   singletons: {
     site: singleton({
       label: 'Site',

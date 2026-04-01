@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import Markdoc from '@markdoc/markdoc';
-import yaml from 'js-yaml';
 import {
   publicationSchema,
   serviceFrontmatterSchema,
@@ -10,9 +9,16 @@ import {
   type PublicationData,
   type SiteData,
 } from './content-schemas';
+import { keystaticReader } from './keystatic-reader';
 
-function contentRoot(): string {
-  return path.join(process.cwd(), 'src', 'content');
+/** Keystatic `fields.slug` on disk is often a plain string; the reader may return `{ name, slug }`. */
+function slugFieldToDisplayString(value: unknown): string {
+  if (typeof value === 'string') return value;
+  if (value && typeof value === 'object' && 'name' in value) {
+    const n = (value as { name?: unknown }).name;
+    if (typeof n === 'string') return n;
+  }
+  throw new Error('Unexpected slug field shape from Keystatic reader');
 }
 
 function splitYamlFrontmatter(raw: string): { frontmatter: string; body: string } {
@@ -37,51 +43,47 @@ function renderMarkdocBody(source: string): string {
 }
 
 export async function loadSiteLive(): Promise<SiteData> {
-  const filePath = path.join(contentRoot(), 'site', 'index.yaml');
-  const raw = await fs.readFile(filePath, 'utf8');
-  const data = yaml.load(raw);
+  const data = await keystaticReader.singletons.site.readOrThrow();
   return siteSchema.parse(data);
 }
 
 export async function loadPublicationsLive(): Promise<PublicationData[]> {
-  const dir = path.join(contentRoot(), 'publications');
-  let names: string[];
-  try {
-    names = await fs.readdir(dir);
-  } catch (e) {
-    const err = e as NodeJS.ErrnoException;
-    if (err.code === 'ENOENT') return [];
-    throw e;
-  }
-  const yamlFiles = names.filter((n) => n.endsWith('.yaml') || n.endsWith('.yml'));
-  const out: PublicationData[] = [];
-  for (const name of yamlFiles) {
-    const raw = await fs.readFile(path.join(dir, name), 'utf8');
-    const data = yaml.load(raw);
-    out.push(publicationSchema.parse(data));
-  }
-  return out;
+  const rows = await keystaticReader.collections.publications.all();
+  return rows.map(({ entry }) =>
+    publicationSchema.parse({
+      slug: slugFieldToDisplayString(entry.slug),
+      citation: entry.citation,
+      category: entry.category,
+      url: entry.url,
+      year: entry.year,
+      languageNote: entry.languageNote,
+      sortOrder: entry.sortOrder,
+    }),
+  );
+}
+
+/** Reader `body` is Markdoc AST; Keystatic `DocumentRenderer` expects ProseMirror JSON — see docs/keystatic-cms.md. */
+async function serviceBodyHtmlFromDisk(fileSlug: string): Promise<string> {
+  const filePath = path.join(process.cwd(), 'src', 'content', 'services', `${fileSlug}.mdoc`);
+  const raw = await fs.readFile(filePath, 'utf8');
+  const { body } = splitYamlFrontmatter(raw);
+  return renderMarkdocBody(body);
 }
 
 export async function loadServicesLive(): Promise<LiveService[]> {
-  const dir = path.join(contentRoot(), 'services');
-  let names: string[];
-  try {
-    names = await fs.readdir(dir);
-  } catch (e) {
-    const err = e as NodeJS.ErrnoException;
-    if (err.code === 'ENOENT') return [];
-    throw e;
-  }
-  const mdocFiles = names.filter((n) => n.endsWith('.mdoc'));
+  const rows = await keystaticReader.collections.services.all({ resolveLinkedFiles: true });
   const out: LiveService[] = [];
-  for (const name of mdocFiles) {
-    const raw = await fs.readFile(path.join(dir, name), 'utf8');
-    const { frontmatter, body } = splitYamlFrontmatter(raw);
-    const fm = yaml.load(frontmatter);
-    const data = serviceFrontmatterSchema.parse(fm);
-    const bodyHtml = renderMarkdocBody(body);
-    out.push({ ...data, bodyHtml });
+  for (const { slug: fileSlug, entry } of rows) {
+    const title = slugFieldToDisplayString(entry.title);
+    const fm = serviceFrontmatterSchema.parse({
+      title,
+      order: entry.order,
+      summary: entry.summary,
+      serviceIncludes: entry.serviceIncludes,
+      selectedExperience: entry.selectedExperience,
+    });
+    const bodyHtml = await serviceBodyHtmlFromDisk(fileSlug);
+    out.push({ ...fm, bodyHtml });
   }
   return out;
 }

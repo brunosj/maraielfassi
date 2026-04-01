@@ -3,6 +3,7 @@ export const prerender = false;
 
 import Layout from '../layouts/Layout.astro';
 import ServicesSection from '../components/ServicesSection.astro';
+// Live SSR: Keystatic Reader (`keystaticReader` in load-live-content.ts); service HTML still Markdoc-from-disk.
 import { loadServicesLive, loadSiteLive } from '../lib/load-live-content';
 
 const site = await loadSiteLive();
