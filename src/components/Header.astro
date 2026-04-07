@@ -12,7 +12,7 @@ const pathname = Astro.url.pathname;
   <div class="site-header__inner">
     <a href="/" class="site-header__brand">
       <span class="site-header__name">{name}</span>
-      <span class="site-header__tagline">{tagline}</span>
+      <!-- <span class="site-header__tagline">{tagline}</span> -->
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="/" class:list={['site-nav__link', { 'is-active': pathname === '/' }]}> Home </a>

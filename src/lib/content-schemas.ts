@@ -4,6 +4,9 @@ import { z } from 'astro/zod';
 export const siteSchema = z.object({
   name: z.string(),
   tagline: z.string(),
+  /** Public URL path from Keystatic `fields.image` + `publicPath` (e.g. `/images/hero/index/heroImage.jpg`). */
+  heroImage: z.string().nullish(),
+  heroImageAlt: z.string().nullish(),
   metaDescription: z.string().optional(),
   intro: z.string(),
   contactEmail: z.string(),

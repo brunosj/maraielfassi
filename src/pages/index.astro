@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import Layout from '../layouts/Layout.astro';
+import HeroPicture from '../components/HeroPicture.astro';
 import ServicesSection from '../components/ServicesSection.astro';
 // Live SSR: Keystatic Reader (`keystaticReader` in load-live-content.ts); service HTML still Markdoc-from-disk.
 import { loadServicesLive, loadSiteLive } from '../lib/load-live-content';
@@ -26,17 +27,23 @@ const introParagraphs = site.intro
   languages={site.languages}
 >
   <div class="page-inner">
+    <HeroPicture
+      src={site.heroImage}
+      alt={
+        site.heroImageAlt?.trim()
+          ? site.heroImageAlt.trim()
+          : `${site.name} — hero image`
+      }
+    />
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero__primary">
         <h1 id="hero-heading" class="hero__name">{site.name}</h1>
+        <p class="hero__tagline">{site.tagline}</p>
       </div>
     </section>
 
     <section class="about-band" id="about" aria-labelledby="intro-heading">
       <div class="about-band__inner">
-        <div class="about-band__block about-band__tagline">
-          <p class="about-band__tagline-text">{site.tagline}</p>
-        </div>
         <div class="about-band__block about-band__content">
           <div class="intro__header">
             <h2 id="intro-heading" class="section-title">About</h2>
@@ -54,6 +61,9 @@ const introParagraphs = site.intro
 
 <style>
   .hero {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
     padding: var(--space-2xl) var(--space-lg);
     margin-bottom: 0;
     border-bottom: none;
@@ -65,14 +75,37 @@ const introParagraphs = site.intro
     }
   }
 
+  .hero__primary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
   .hero__name {
     font-family: var(--font-display);
-    font-size: clamp(2.25rem, 7vw, 4.25rem);
+    font-size: clamp(1.65rem, 4.8vw, 3rem);
     font-weight: 800;
     margin: 0;
     line-height: 0.95;
     letter-spacing: -0.04em;
     text-transform: uppercase;
+  }
+
+  .hero__tagline {
+    margin: 0;
+    max-width: none;
+    width: 100%;
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 40rem) {
+    .hero__tagline {
+      font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+      line-height: 1.48;
+    }
   }
 
   .page-inner > .about-band {
@@ -91,12 +124,6 @@ const introParagraphs = site.intro
     grid-template-columns: 1fr;
   }
 
-  @media (min-width: 40rem) {
-    .about-band__inner {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
   .about-band__block {
     padding: var(--space-xl) var(--space-lg);
     border-bottom: var(--border-thin);
@@ -111,42 +138,6 @@ const introParagraphs = site.intro
   @media (min-width: 40rem) {
     .about-band__block {
       border-bottom: none;
-    }
-
-    .about-band__block:first-child {
-      border-right: var(--border-strong);
-    }
-  }
-
-  .about-band__tagline {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-width: 0;
-  }
-
-  @media (max-width: 39.99rem) {
-    .about-band__tagline {
-      justify-content: flex-start;
-      text-align: left;
-    }
-  }
-
-  .about-band__tagline-text {
-    margin: 0;
-    font-family: var(--font-serif);
-    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
-    line-height: 1.5;
-    color: var(--color-text-muted);
-    max-width: 32rem;
-  }
-
-  @media (min-width: 40rem) {
-    .about-band__tagline-text {
-      font-size: clamp(1.4rem, 2.4vw, 1.8rem);
-      line-height: 1.48;
-      max-width: 38rem;
     }
   }
 

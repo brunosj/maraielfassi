@@ -1,0 +1,61 @@
+---
+export interface Props {
+  /** Public path from Keystatic image field, e.g. `/images/hero/...` */
+  src?: string | null;
+  alt: string;
+}
+
+const { src, alt } = Astro.props;
+const trimmed = typeof src === 'string' ? src.trim() : '';
+---
+
+{
+  trimmed ? (
+    <figure class="hero-picture">
+      <div class="hero-picture__frame">
+        <img
+          class="hero-picture__img"
+          src={trimmed}
+          alt={alt}
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </div>
+    </figure>
+  ) : null
+}
+
+<style>
+  .hero-picture {
+    margin: 0;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hero-picture__frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: min(52vh, 28rem);
+    /* border: var(--border-strong); */
+    background: var(--color-bg);
+    overflow: hidden;
+  }
+
+  .hero-picture__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: grayscale(100%);
+  }
+
+  @media (max-width: 40rem) {
+    .hero-picture__frame {
+      max-height: min(42vh, 20rem);
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

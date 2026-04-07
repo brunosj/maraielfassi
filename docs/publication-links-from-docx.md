@@ -1,6 +1,6 @@
 # Publication links from the Word consultancy doc
 
-Hyperlinks in `Consultancy Services.docx` are stored in Office Open XML (`word/document.xml` + `word/_rels/document.xml.rels`). The repo includes a small extractor that does not need extra npm packages — it shells out to `unzip`.
+Hyperlinks in `mef-content.docx` are stored in Office Open XML (`word/document.xml` + `word/_rels/document.xml.rels`). The repo includes a small extractor that does not need extra npm packages — it shells out to `unzip`.
 
 ## Re-run extraction
 

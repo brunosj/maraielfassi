@@ -24,6 +24,16 @@ export default config({
       schema: {
         name: fields.text({ label: 'Name' }),
         tagline: fields.text({ label: 'Tagline' }),
+        heroImage: fields.image({
+          label: 'Hero image',
+          description: 'Shown on the homepage under the title and tagline.',
+          directory: 'public/images/hero',
+          publicPath: '/images/hero/',
+        }),
+        heroImageAlt: fields.text({
+          label: 'Hero image description',
+          description: 'Short alt text for accessibility (recommended when a hero image is set).',
+        }),
         metaDescription: fields.text({
           label: 'Meta description',
           multiline: true,
